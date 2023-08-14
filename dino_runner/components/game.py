@@ -113,7 +113,7 @@ class Game:
 
     def show_menu(self):    # definiu os dois menus (de iniciar e reiniciar)
         self.screen.fill((255,255,255))
-        half_screen_heigth = SCREEN_HEIGHT // 2
+        half_screen_heigth = SCREEN_HEIGHT // 2 # faz a divisão e não retorna numeros quebrados
         half_screen_width = SCREEN_WIDTH // 2
 
         if self.death_count == 0:
