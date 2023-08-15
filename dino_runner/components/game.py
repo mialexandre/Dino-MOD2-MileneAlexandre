@@ -26,7 +26,6 @@ class Game:
         self.x_pos_bg = 0
         self.y_pos_bg = 300
         self.player = Dinosaur()
-
         self.obstacle_manager = ObstacleManager()
         self.power_up_manager = PowerUpManager()
 
@@ -69,7 +68,7 @@ class Game:
 
     def draw(self):
         self.clock.tick(FPS)
-        self.screen.fill((255,255,255))
+        self.screen.fill((255, 255, 255)) #cor do céu
         self.draw_background()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
@@ -81,7 +80,7 @@ class Game:
 
     def draw_background(self):
         image_width = BG.get_width() # bg é uma constante de background
-        self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))    # blit junta as imagens para aparecer em conjunto, vai enfileirando as imgs tmb
+        self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg + 80))    # blit junta as imagens para aparecer em conjunto, vai enfileirando as imgs tmb
         self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
         if self.x_pos_bg <= -image_width:
             self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
@@ -120,20 +119,20 @@ class Game:
                 self.run()
 
     def show_menu(self):    # definiu os dois menus (de iniciar e reiniciar)
-        self.screen.fill((255,255,255))
+        self.screen.fill((255, 255, 255))
         half_screen_heigth = SCREEN_HEIGHT // 2 # faz a divisão e não retorna numeros quebrados
         half_screen_width = SCREEN_WIDTH // 2
 
         if self.death_count == 0:
             draw_message_component("APERTE QUALQUER TECLA PARA INICIAR", self.screen)
         else:
-            draw_message_component("PRESSIONE QUALQUER TECLA PARA REINICIAR", self.screen, pos_x_center= half_screen_heigth + 140)
+            draw_message_component("PRESSIONE QUALQUER TECLA PARA REINICIAR", self.screen, pos_x_center= half_screen_heigth + 250, pos_y_center= half_screen_width - 350)
             draw_message_component(
                 f"SUA PONTUAÇÃO: {self.score}",
                 self.screen,
                 pos_y_center= half_screen_width - 100
             )
-            self.screen.blit(ICON, (half_screen_width - 40, half_screen_heigth - 30))
+            self.screen.blit(ICON, (half_screen_width - 40, half_screen_heigth - 30)) # mexe com as dimensões do icone na janela
             
         pygame.display.flip() 
         self.handle_events_on_menu()
