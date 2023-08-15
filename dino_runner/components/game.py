@@ -34,13 +34,13 @@ class Game:
         self.running = True
         while self.running:
             if not self.playing:
-                self.show_menu()    # mostra o menu de restart
-        pygame.display.quit()   # voltar pro jogo
-        pygame.quit()   # sai do jogo
+                self.show_menu() # mostra o menu de restart
+        pygame.display.quit() # voltar pro jogo
+        pygame.quit() # sai do jogo
 
     def run(self):
         self.playing = True
-        self.obstacle_manager.reset_obstacle()  # reseta os obstaculos para a velocidade inicial
+        self.obstacle_manager.reset_obstacles()  # reseta os obstaculos para a velocidade inicial
         self.power_up_manager.reset_power_ups()
         self.game_speed = 20
         self.score = 0
@@ -79,7 +79,7 @@ class Game:
         pygame.display.update()
         pygame.display.flip()   # flip traz movimento do jogo para parecer real
 
-    def draw_backgound(self):
+    def draw_background(self):
         image_width = BG.get_width() # bg é uma constante de background
         self.screen.blit(BG, (self.x_pos_bg, self.y_pos_bg))    # blit junta as imagens para aparecer em conjunto, vai enfileirando as imgs tmb
         self.screen.blit(BG, (image_width + self.x_pos_bg, self.y_pos_bg))
@@ -90,10 +90,10 @@ class Game:
 
     def draw_score(self):
         draw_message_component(
-            f"PONTUAÇÃO: {self.score}"
+            f"PONTUAÇÃO: {self.score}",
             self.screen,
             pos_x_center= 1000,
-            pos_y_center= 50  
+            pos_y_center= 50
         )
 
     def draw_power_up_time(self):   # quando pegar o escudo/martelo, vai definir os segundos restantes com ele
@@ -111,6 +111,14 @@ class Game:
                 self.player.has_power_up = False
                 self.player.type = DEFAULT_TYPE
 
+    def handle_events_on_menu(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.playing = False
+                self.running = False
+            elif event.type == pygame.KEYDOWN:
+                self.run()
+
     def show_menu(self):    # definiu os dois menus (de iniciar e reiniciar)
         self.screen.fill((255,255,255))
         half_screen_heigth = SCREEN_HEIGHT // 2 # faz a divisão e não retorna numeros quebrados
@@ -127,6 +135,6 @@ class Game:
             )
             self.screen.blit(ICON, (half_screen_width - 40, half_screen_heigth - 30))
             
-        pygame.display.flip()
-            
+        pygame.display.flip() 
         self.handle_events_on_menu()
+        
