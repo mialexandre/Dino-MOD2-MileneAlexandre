@@ -14,7 +14,7 @@ class Obstacle(Sprite):
     def update(self, game_speed, obstacles):
         self.rect.x -= game_speed 
         if self.rect.x < -self.rect.width:
-            obstacles.pop() #define de forma aleatoria como o obstáculo vai aparecer
+            obstacles.pop() 
 
     def draw(self, screen):
         screen.blit(self.image[self.type], (self.rect.x, self.rect.y))

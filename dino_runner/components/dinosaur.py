@@ -2,7 +2,7 @@ import pygame
 
 from pygame.sprite import Sprite
 
-from dino_runner.utils.constants import RUNNING, JUMPING, DUCKING, DEFAULT_TYPE, SHIELD_TYPE, DUCKING_SHIELD, JUMPING_SHIELD, RUNNING_SHIELD
+from dino_runner.utils.constants import RUNNING, JUMP_SOUND, JUMPING, DUCKING, DEFAULT_TYPE, SHIELD_TYPE, DUCKING_SHIELD, JUMPING_SHIELD, RUNNING_SHIELD
 
  
 DUCK_IMG = { DEFAULT_TYPE: DUCKING, SHIELD_TYPE: DUCKING_SHIELD}
@@ -33,7 +33,7 @@ class Dinosaur(Sprite):
         self.jump_vel = JUMP_VEL
         self.setup_state()
 
-    def setup_state(self):
+    def setup_state(self): # desativa o escudo / define que o personagem está sem poder nenhum
         self.has_power_up = False
         self.shield = False
         self.show_text = False
@@ -47,6 +47,7 @@ class Dinosaur(Sprite):
         elif self.dino_duck:
             self.duck()
         if user_input[pygame.K_UP] and not self.dino_jump:
+            JUMP_SOUND.play()
             self.dino_run = False
             self.dino_jump = True
             self.dino_duck =  False
@@ -63,6 +64,7 @@ class Dinosaur(Sprite):
 
     def run(self):
         self.image = RUN_IMG[self.type][self.step_index // 5]
+        self.image = pygame.transform.scale(self.image, (80, 110))
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = X_POS
         self.dino_rect.y = Y_POS
@@ -70,6 +72,7 @@ class Dinosaur(Sprite):
 
     def jump(self):
         self.image = JUMP_IMG[self.type]
+        self.image = pygame.transform.scale(self.image, (80, 110))
         if self.dino_jump:
             self.dino_rect.y -= self.jump_vel * 4
             self.jump_vel -= 0.8 
@@ -80,6 +83,7 @@ class Dinosaur(Sprite):
     
     def duck(self):
         self.image = DUCK_IMG[self.type][self.step_index // 5]
+        self.image = pygame.transform.scale(self.image, (80, 80))
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = X_POS
         self.dino_rect.y = Y_POS_DUCK

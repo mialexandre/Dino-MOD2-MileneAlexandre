@@ -1,7 +1,7 @@
 import pygame
 
 
-from dino_runner.utils.constants import BG, ICON, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
+from dino_runner.utils.constants import BG, ICON, SOUNDTRACK, SCREEN_HEIGHT, SCREEN_WIDTH, TITLE, FPS, DEFAULT_TYPE
 
 from dino_runner.components.dinosaur import Dinosaur
 
@@ -31,13 +31,14 @@ class Game:
 
     def execute(self):
         self.running = True
+        SOUNDTRACK.play()
         while self.running:
             if not self.playing:
                 self.show_menu() # mostra o menu de restart
         pygame.display.quit() # voltar pro jogo
         pygame.quit() # sai do jogo
 
-    def run(self):
+    def run(self): # jogo começa
         self.playing = True
         self.obstacle_manager.reset_obstacles()  # reseta os obstaculos para a velocidade inicial
         self.power_up_manager.reset_power_ups()
@@ -48,13 +49,13 @@ class Game:
             self.update()
             self.draw()
 
-    def events(self):
+    def events(self): # jogo para
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
                 self.running = False
 
-    def update(self):
+    def update(self): 
         user_input = pygame.key.get_pressed()
         self.player.update(user_input)
         self.obstacle_manager.update(self)
@@ -68,7 +69,7 @@ class Game:
 
     def draw(self):
         self.clock.tick(FPS)
-        self.screen.fill((255, 255, 255)) #cor do céu
+        self.screen.fill((255, 182, 193)) #cor do céu
         self.draw_background()
         self.player.draw(self.screen)
         self.obstacle_manager.draw(self.screen)
@@ -95,7 +96,7 @@ class Game:
             pos_y_center= 50
         )
 
-    def draw_power_up_time(self):   # quando pegar o escudo/martelo, vai definir os segundos restantes com ele
+    def draw_power_up_time(self):   # quando pegar o escudo, vai definir os segundos restantes com ele
         if self.player.has_power_up:
             time_to_show = round((self.player.power_up_time - pygame.time.get_ticks()) / 1000, 2)
             if time_to_show >= 0:
@@ -110,7 +111,7 @@ class Game:
                 self.player.has_power_up = False
                 self.player.type = DEFAULT_TYPE
 
-    def handle_events_on_menu(self):
+    def handle_events_on_menu(self): # reinicia o jogo
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.playing = False
@@ -119,21 +120,23 @@ class Game:
                 self.run()
 
     def show_menu(self):    # definiu os dois menus (de iniciar e reiniciar)
-        self.screen.fill((255, 255, 255))
+        self.screen.fill((255, 182, 193))
         half_screen_heigth = SCREEN_HEIGHT // 2 # faz a divisão e não retorna numeros quebrados
         half_screen_width = SCREEN_WIDTH // 2
 
         if self.death_count == 0:
             draw_message_component("APERTE QUALQUER TECLA PARA INICIAR", self.screen)
         else:
-            draw_message_component("PRESSIONE QUALQUER TECLA PARA REINICIAR", self.screen, pos_x_center= half_screen_heigth + 250, pos_y_center= half_screen_width - 350)
+            draw_message_component("PRESSIONE QUALQUER TECLA PARA REINICIAR", self.screen, pos_x_center= half_screen_heigth + 250, pos_y_center= half_screen_width - 380)
             draw_message_component(
                 f"SUA PONTUAÇÃO: {self.score}",
                 self.screen,
-                pos_y_center= half_screen_width - 100
+                pos_y_center= half_screen_width - 130
             )
-            self.screen.blit(ICON, (half_screen_width - 40, half_screen_heigth - 30)) # mexe com as dimensões do icone na janela
+            self.image = ICON
+            self.image = pygame.transform.scale(self.image, (130, 180))
+            self.screen.blit(self.image, (half_screen_width - 80, half_screen_heigth - 100)) # mexe com as dimensões do icone na janela
             
-        pygame.display.flip() 
+        pygame.display.flip() # atualiza a superfície de exibição da tela
         self.handle_events_on_menu()
         
