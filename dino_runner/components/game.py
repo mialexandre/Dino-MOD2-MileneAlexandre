@@ -127,7 +127,7 @@ class Game:
         if self.death_count == 0:
             draw_message_component("APERTE QUALQUER TECLA PARA INICIAR", self.screen)
         else:
-            draw_message_component("PRESSIONE QUALQUER TECLA PARA REINICIAR", self.screen, pos_x_center= half_screen_heigth + 250, pos_y_center= half_screen_width - 380)
+            draw_message_component("QUE PENA, VOCÊ MORREU! PRESSIONE QUALQUER TECLA PARA REINICIAR", self.screen, pos_x_center= half_screen_heigth + 250, pos_y_center= half_screen_width - 380)
             draw_message_component(
                 f"SUA PONTUAÇÃO: {self.score}",
                 self.screen,
